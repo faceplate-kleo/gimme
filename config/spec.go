@@ -40,14 +40,17 @@ func ReadGimmeFileV1(gimmePath string) (SpecV1, error) {
 
 	version, data, err := unpackGimmeFile(gimmePath)
 	if err != nil {
-		return spec, nil
+		return spec, fmt.Errorf("failed to unpack gimme file: %s", err)
 	}
 
-	if version == "v1" {
-		spec = SpecV1{}
-		err = yaml.Unmarshal(data, &spec)
-	} else {
+	if version != "v1" {
 		return spec, fmt.Errorf("unrecognized gimmeVersion: %s", version)
+	}
+
+	spec = SpecV1{}
+	err = yaml.Unmarshal(data, &spec)
+	if err != nil {
+		return spec, fmt.Errorf("failed to unmarshal gimme data: %s", err)
 	}
 
 	return spec, nil

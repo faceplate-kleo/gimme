@@ -11,7 +11,7 @@ func DiscoverPaths() ([]string, error) {
 	home := os.Getenv("HOME")
 	paths := make([]string, 0)
 
-	regex, err := regexp.Compile("\\.gimme\\.yaml$")
+	regex, err := regexp.Compile(`\.gimme\.yaml$`)
 	if err != nil {
 		return paths, fmt.Errorf("failed to compile regex: %s", err)
 	}
