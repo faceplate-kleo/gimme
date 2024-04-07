@@ -4,7 +4,16 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
+	"slices"
 )
+
+func GetReservedWords() []string {
+	return []string{
+		"discover",
+		"init",
+		"sync",
+	}
+}
 
 type Spec interface {
 	SpecGeneric | SpecV1
@@ -51,6 +60,10 @@ func ReadGimmeFileV1(gimmePath string) (SpecV1, error) {
 	err = yaml.Unmarshal(data, &spec)
 	if err != nil {
 		return spec, fmt.Errorf("failed to unmarshal gimme data: %s", err)
+	}
+
+	if slices.Contains(GetReservedWords(), spec.Gimme.Alias) {
+		return spec, fmt.Errorf("failed to read spec: alias %s is reserved", spec.Gimme.Alias)
 	}
 
 	return spec, nil

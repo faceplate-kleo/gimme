@@ -1,3 +1,6 @@
 .gimme.yaml
 test.sh
 .idea
+
+test/.gimme/aliases.yaml
+test/.gimme/config.yaml
