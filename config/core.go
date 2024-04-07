@@ -72,8 +72,8 @@ func (c *Config) EnsureSetup() error {
 	if _, err := os.Stat(gimmeConfFile); errors.Is(err, fs.ErrNotExist) {
 		emptyData := make([]byte, 0)
 
-		writeErr := os.WriteFile(gimmeConfFile, emptyData, 775)
-		if writeErr != nil {
+		err := os.WriteFile(gimmeConfFile, emptyData, 775)
+		if err != nil {
 			return fmt.Errorf("failed to create empty config file: %s", err)
 		}
 	}
