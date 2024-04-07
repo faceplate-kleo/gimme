@@ -1,0 +1,9 @@
+---
+gimmeVersion: v1
+gimme:
+  alias: gimme-dev
+  init:
+    - "git pull"
+  env:
+    TEST_TOKEN: abcd1234hjkl
+  kube: "~/.kube/kubeconfig-example.yaml" # Requires kubeconfigNonsense: true in root config

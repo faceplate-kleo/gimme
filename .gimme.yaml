@@ -1,0 +1,7 @@
+---
+gimmeVersion: v1
+gimme:
+  alias: test
+  init:
+  env:
+    GIMME: true
