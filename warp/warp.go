@@ -2,8 +2,9 @@ package warp
 
 import (
 	"fmt"
-	"github.com/faceplate-kleo/gimme/config"
-	"github.com/faceplate-kleo/gimme/discovery"
+	"github.com/faceplate-kleo/gimme-core/config"
+	"github.com/faceplate-kleo/gimme-core/discovery"
+	"path"
 )
 
 func Warp(alias string, conf *config.Config) error {
@@ -16,12 +17,12 @@ func Warp(alias string, conf *config.Config) error {
 		return fmt.Errorf("failed to read alias file: %s", err)
 	}
 
-	path, ok := aliases[alias]
+	gimmePath, ok := aliases[alias]
 	if !ok {
 		return fmt.Errorf("failed to warp: alias %s not found", alias)
 	}
 
-	fmt.Printf("I WARP WOO %s\n", path)
+	fmt.Printf("I WARP WOO %s\n", path.Dir(gimmePath))
 
 	return nil
 }

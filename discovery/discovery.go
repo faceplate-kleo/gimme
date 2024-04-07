@@ -2,7 +2,7 @@ package discovery
 
 import (
 	"fmt"
-	"github.com/faceplate-kleo/gimme/config"
+	"github.com/faceplate-kleo/gimme-core/config"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
@@ -23,7 +23,6 @@ func DiscoverPaths(rootPath string) ([]string, error) {
 		}
 		return nil
 	})
-
 	if err != nil {
 		return paths, fmt.Errorf("failed to walk directory hierarchy: %s", err)
 	}

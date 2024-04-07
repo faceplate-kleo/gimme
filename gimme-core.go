@@ -3,17 +3,19 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/faceplate-kleo/gimme/config"
-	"github.com/faceplate-kleo/gimme/discovery"
-	"github.com/faceplate-kleo/gimme/warp"
+	"github.com/faceplate-kleo/gimme-core/config"
+	"github.com/faceplate-kleo/gimme-core/discovery"
+	"github.com/faceplate-kleo/gimme-core/warp"
 	"log"
 	"os"
 )
 
 func main() {
 	var verboseFlag bool
+	var dryrunFlag bool
 
 	flag.BoolVar(&verboseFlag, "v", false, "toggle verbose output")
+	flag.BoolVar(&dryrunFlag, "--dryrun", false, "toggle dry run (no file operations will be executed)")
 
 	flag.Parse()
 

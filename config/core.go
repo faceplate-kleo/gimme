@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	defaultRootConfig = "~/.gimme/config.yaml"
+	defaultRootConfig = ".gimme/config.yaml"
 )
 
 type Config struct {
@@ -20,7 +20,7 @@ type Config struct {
 }
 
 func LoadRootConfig() (Config, error) {
-	configPath := defaultRootConfig
+	configPath := path.Join(os.Getenv("HOME"), defaultRootConfig)
 	override, set := os.LookupEnv("GIMME_CONFIG_PATH")
 	if set {
 		configPath = override
