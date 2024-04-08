@@ -1,5 +1,5 @@
 test.sh
 .idea
 
-test/.gimme/aliases.yaml
-test/.gimme/config.yaml
+gimme-core/test/.gimme/aliases.yaml
+gimme-core/test/.gimme/config.yaml

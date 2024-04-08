@@ -26,6 +26,6 @@ func TestLoadConfig(t *testing.T) {
 	conf, err := LoadRootConfig()
 	assert.Nil(t, err)
 
-	assert.Equal(t, "/home/kleo/Dev/go/gimme/test", conf.HomeOverride)
+	assert.Equal(t, "../test", conf.HomeOverride)
 	assert.Equal(t, true, conf.KubeconfigEdit)
 }
