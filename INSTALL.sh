@@ -1,4 +1,5 @@
 [ "$UID" -eq 0 ] || exec sudo bash "$0" "$SHELL" "$HOME"
+set -e
 INSTALL_ROOT="/usr/local/bin"
 PARENT_SHELL=$1
 PARENT_HOME=$2
@@ -22,9 +23,9 @@ echo "Done."
 
 echo "Installing alias..."
 
-grep -s "alias gimme" $RC_FILE
+grep -s "alias gimme" "$RC_FILE"
 if [[ $? == 1 ]]; then
-  echo "alias gimme='. gimme.$SCRIPT_EXTENSION'" >> $RC_FILE
+  echo "alias gimme='. gimme.$SCRIPT_EXTENSION'" >> "$RC_FILE"
 fi
 
 echo -e "Done. \nRun the following to begin using gimme:\nsource $RC_FILE"

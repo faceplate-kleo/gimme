@@ -21,13 +21,12 @@ func main() {
 
 	flag.Parse()
 
-	conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
-	if err != nil {
-		log.Fatalf("fatal: %s", err)
-	}
-
 	for _, arg := range flag.Args() {
 		if arg == "discover" {
+			conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
+			if err != nil {
+				log.Fatalf("fatal: %s", err)
+			}
 			fmt.Printf("Discovering .gimme.yaml files starting from root %s...\n", conf.DetermineHome())
 			paths, err := discovery.DiscoverPaths(conf.DetermineHome())
 			if err != nil {
@@ -43,16 +42,25 @@ func main() {
 				fmt.Println(path)
 			}
 		} else if arg == "init" {
+			conf := config.Config{}
 			err := conf.EnsureSetup()
 			if err != nil {
 				log.Fatalf("fatal during init: %s", err)
 			}
 		} else if arg == "sync" {
-			err := discovery.SyncAliasFile(&conf)
+			conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
+			if err != nil {
+				log.Fatalf("fatal: %s", err)
+			}
+			err = discovery.SyncAliasFile(&conf)
 			if err != nil {
 				log.Fatalf("fatal during sync: %s", err)
 			}
 		} else {
+			conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
+			if err != nil {
+				log.Fatalf("fatal: %s", err)
+			}
 			gimmePath, err := warp.Warp(arg, &conf)
 			if err != nil {
 				log.Fatalf("fatal during warp: %s", err)
