@@ -16,7 +16,7 @@ func TestSyncAliases(t *testing.T) {
 	err := os.Setenv("GIMME_CONFIG_PATH", "../test/.gimme/test-config.yaml")
 	assert.Nil(t, err, "error from os.Setenv: %s", err)
 
-	conf, err := config.LoadRootConfig()
+	conf, err := config.LoadRootConfig(false, false)
 	assert.Nil(t, err, "error from config.LoadRootConfig: %s", err)
 
 	err = SyncAliasFile(&conf)

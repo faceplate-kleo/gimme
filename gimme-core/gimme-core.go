@@ -13,13 +13,15 @@ import (
 func main() {
 	var verboseFlag bool
 	var dryrunFlag bool
+	var manifestFlag bool
 
 	flag.BoolVar(&verboseFlag, "v", false, "toggle verbose output")
-	flag.BoolVar(&dryrunFlag, "--dryrun", false, "toggle dry run (no file operations will be executed)")
+	flag.BoolVar(&dryrunFlag, "dryrun", false, "toggle dry run (no file operations will be executed)")
+	flag.BoolVar(&manifestFlag, "manifest", false, "toggle manifest mode (for use in injection scripting)")
 
 	flag.Parse()
 
-	conf, err := config.LoadRootConfig()
+	conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
 	if err != nil {
 		log.Fatalf("fatal: %s", err)
 	}
@@ -51,9 +53,18 @@ func main() {
 				log.Fatalf("fatal during sync: %s", err)
 			}
 		} else {
-			err := warp.Warp(arg, &conf)
+			gimmePath, err := warp.Warp(arg, &conf)
 			if err != nil {
 				log.Fatalf("fatal during warp: %s", err)
+			}
+
+			projectConf, err := config.ReadGimmeFileV1(gimmePath, &conf)
+			if err != nil {
+				log.Fatalf("fatal: failed to read config file %s: %s", gimmePath, err)
+			}
+			err = projectConf.Process()
+			if err != nil {
+				log.Fatalf("fatal: failed to process: %s", err)
 			}
 		}
 	}

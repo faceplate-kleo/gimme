@@ -8,6 +8,7 @@ import (
 )
 
 type SpecV1 struct {
+	Conf         *Config      `yaml:",omitempty"`
 	GimmeVersion string       `yaml:"gimmeVersion"`
 	Gimme        gimmeBlockV1 `yaml:"gimme"`
 }
@@ -33,6 +34,10 @@ func (s *SpecV1) Process() error {
 
 func (s *SpecV1) executeInit() error {
 	for _, initLine := range s.Gimme.Init {
+		if s.Conf.Manifest {
+			fmt.Printf("[CMD] %s\n", initLine)
+			continue
+		}
 		tokens := strings.Split(initLine, " ")
 		args := make([]string, 0)
 		if len(tokens) > 1 {
@@ -49,7 +54,10 @@ func (s *SpecV1) executeInit() error {
 
 func (s *SpecV1) setEnvironment() error {
 	for envKey, envVal := range s.Gimme.Env {
-		fmt.Println(envKey, envVal)
+		if s.Conf.Manifest {
+			fmt.Printf("[ENV] %s %s\n", envKey, envVal)
+			continue
+		}
 		err := os.Setenv(envKey, envVal)
 		if err != nil {
 			return fmt.Errorf("error setting environment variable %s to %s : %s", envKey, envVal, err)

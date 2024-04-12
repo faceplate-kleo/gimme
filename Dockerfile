@@ -4,9 +4,9 @@ FROM golang:latest
 
 RUN apt update
 
-COPY ./gimme-core /gimme-core
+COPY . /gimme
 
-WORKDIR /gimme-core
+WORKDIR /gimme/gimme-core
 RUN go install gimme-core.go # prep the binary why not, go nuts
 
 ENTRYPOINT ["go", "test", "-v", "./..."]

@@ -3,5 +3,9 @@ gimmeVersion: v1
 gimme:
   alias: test
   init:
+    - "echo 'hello world'"
+    - "git status"
   env:
     GIMME: true
+    HELLO: world
+    KUBECONFIG: ~/.kube/kubeconfig-bogus.yml
