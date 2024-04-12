@@ -67,7 +67,7 @@ func (c *Config) EnsureSetup() error {
 		home = c.HomeOverride
 	}
 	gimmeConfDir := path.Join(home, ".gimme")
-	err := os.Mkdir(gimmeConfDir, 775)
+	err := os.Mkdir(gimmeConfDir, 0775)
 	if err != nil && !errors.Is(err, fs.ErrExist) {
 		return fmt.Errorf("failed to create .gimme config directory: %s", err)
 	}
@@ -77,7 +77,7 @@ func (c *Config) EnsureSetup() error {
 	if _, err := os.Stat(gimmeConfFile); errors.Is(err, fs.ErrNotExist) {
 		emptyData := make([]byte, 0)
 
-		err := os.WriteFile(gimmeConfFile, emptyData, 775)
+		err := os.WriteFile(gimmeConfFile, emptyData, 0664)
 		if err != nil {
 			return fmt.Errorf("failed to create empty config file: %s", err)
 		}

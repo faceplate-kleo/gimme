@@ -68,7 +68,7 @@ func SyncAliasFile(conf *config.Config) error {
 		return fmt.Errorf("failed to marshal alias yaml: %s", err)
 	}
 
-	err = os.WriteFile(conf.GetAliasFilePath(), yamlData, 775)
+	err = os.WriteFile(conf.GetAliasFilePath(), yamlData, 0664)
 	if err != nil {
 		return fmt.Errorf("failed to write alias yaml: %s", err)
 	}
