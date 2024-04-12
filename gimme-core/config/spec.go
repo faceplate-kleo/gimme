@@ -44,7 +44,7 @@ func unpackGimmeFile(gimmePath string) (version string, data []byte, err error) 
 	return yamlData.GimmeVersion, data, nil
 }
 
-func ReadGimmeFileV1(gimmePath string) (SpecV1, error) {
+func ReadGimmeFileV1(gimmePath string, conf *Config) (SpecV1, error) {
 	spec := SpecV1{}
 
 	version, data, err := unpackGimmeFile(gimmePath)
@@ -56,7 +56,9 @@ func ReadGimmeFileV1(gimmePath string) (SpecV1, error) {
 		return spec, fmt.Errorf("unrecognized gimmeVersion: %s", version)
 	}
 
-	spec = SpecV1{}
+	spec = SpecV1{
+		Conf: conf,
+	}
 	err = yaml.Unmarshal(data, &spec)
 	if err != nil {
 		return spec, fmt.Errorf("failed to unmarshal gimme data: %s", err)

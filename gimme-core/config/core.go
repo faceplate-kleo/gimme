@@ -15,18 +15,23 @@ const (
 )
 
 type Config struct {
+	Dryrun         bool   `yaml:",omitempty"`
+	Manifest       bool   `yaml:",omitempty"`
 	HomeOverride   string `yaml:"homeOverride"`
 	KubeconfigEdit bool   `yaml:"kubeconfigEdit"`
 }
 
-func LoadRootConfig() (Config, error) {
+func LoadRootConfig(dryrun, manifest bool) (Config, error) {
 	configPath := path.Join(os.Getenv("HOME"), defaultRootConfig)
 	override, set := os.LookupEnv("GIMME_CONFIG_PATH")
 	if set {
 		configPath = override
 	}
 
-	base := Config{}
+	base := Config{
+		Dryrun:   dryrun,
+		Manifest: manifest,
+	}
 	data, err := os.ReadFile(configPath)
 	if err != nil {
 		return base, fmt.Errorf("failed to read config file: %s", err)

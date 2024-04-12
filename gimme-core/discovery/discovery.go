@@ -32,9 +32,13 @@ func DiscoverPaths(rootPath string) ([]string, error) {
 
 func PopulateAliases(paths []string) (map[string]string, error) {
 	aliases := make(map[string]string)
+	conf := config.Config{
+		Dryrun:   false,
+		Manifest: false,
+	}
 
 	for _, path := range paths {
-		conf, err := config.ReadGimmeFileV1(path)
+		conf, err := config.ReadGimmeFileV1(path, &conf)
 		if err != nil {
 			return aliases, fmt.Errorf("failed to load config %s for alias information: %s", path, err)
 		}
