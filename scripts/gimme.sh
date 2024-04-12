@@ -1,6 +1,6 @@
 #!/bin/bash
 
-reserved="sync init discover"
+reserved="sync init discover list"
 
 if [[ "$reserved" = *"$1"* ]]; then
   gimme-core "$1"

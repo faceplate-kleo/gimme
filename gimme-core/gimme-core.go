@@ -56,6 +56,15 @@ func main() {
 			if err != nil {
 				log.Fatalf("fatal during sync: %s", err)
 			}
+		} else if arg == "list" {
+			conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
+			if err != nil {
+				log.Fatalf("fatal: %s", err)
+			}
+			err = discovery.ListAliases(&conf)
+			if err != nil {
+				log.Fatalf("fatal during list: %s", err)
+			}
 		} else {
 			conf, err := config.LoadRootConfig(dryrunFlag, manifestFlag)
 			if err != nil {

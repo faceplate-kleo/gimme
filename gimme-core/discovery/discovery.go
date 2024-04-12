@@ -95,3 +95,15 @@ func ReadAliasFile(conf *config.Config) (map[string]string, error) {
 	return aliases, nil
 
 }
+
+func ListAliases(conf *config.Config) error {
+	aliases, err := ReadAliasFile(conf)
+	if err != nil {
+		return fmt.Errorf("failed to list aliases: %s", err)
+	}
+
+	for alias, dest := range aliases {
+		fmt.Printf("%-20s\t%s\n", alias, dest)
+	}
+	return nil
+}
