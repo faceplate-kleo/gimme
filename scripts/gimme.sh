@@ -17,12 +17,14 @@ else
 
     # Perform exports
 
-    echo "Exporting the following variables:"
-    while IFS= read -r line; do
-      read -r -a tokens <<< "$line"
-      export "${tokens[1]}"="${tokens[2]}"
-      echo -e "\t${tokens[1]}=${tokens[2]}"
-    done <<< "$environ"
+    if [[ -n $environ ]]; then
+      echo "Exporting the following variables:"
+      while IFS= read -r line; do
+        read -r -a tokens <<< "$line"
+        export "${tokens[1]}"="${tokens[2]}"
+        echo -e "\t${tokens[1]}=${tokens[2]}"
+      done <<< "$environ"
+    fi
 
     # Execute commands
 
