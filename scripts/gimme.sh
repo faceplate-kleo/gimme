@@ -28,22 +28,24 @@ else
 
     # Execute commands
 
-    echo "The following commands are requested:"
-    while IFS= read -r line; do
-      cmdStripped=${line/"[CMD] "/}
-      echo -e "\t$cmdStripped"
-    done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
-
-    if read -r -p "Ok with you? (Y/N): " confirm && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]; then
+    if [[ -n $gimmeCommands ]]; then
+      echo "The following commands are requested:"
       while IFS= read -r line; do
-        cmdStripped=${line/"[CMD]"/}
-        read -r -a tokens <<< "$cmdStripped"
-        command="${tokens[0]}"
-        args="${tokens[@]:1}"
-        echo -e "$(eval "$command" "$args")"
+        cmdStripped=${line/"[CMD] "/}
+        echo -e "\t$cmdStripped"
       done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
-    else
-      echo "No injection commands executed!"
+
+      if read -r -p "Ok with you? (Y/N): " confirm && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]; then
+        while IFS= read -r line; do
+          cmdStripped=${line/"[CMD]"/}
+          read -r -a tokens <<< "$cmdStripped"
+          command="${tokens[0]}"
+          args="${tokens[@]:1}"
+          echo -e "$(eval "$command" "$args")"
+        done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
+      else
+        echo "No injection commands executed!"
+      fi
     fi
   fi
 fi
