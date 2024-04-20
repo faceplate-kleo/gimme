@@ -17,31 +17,35 @@ else
 
     # Perform exports
 
-    echo "Exporting the following variables:"
-    while IFS= read -r line; do
-      read -r -A tokens <<< "$line"
-      export "${tokens[2]}"="${tokens[3]}"
-      echo -e "\t${tokens[2]}=${tokens[3]}"
-    done <<< "$environ"
+    if [[ -n $environ ]]; then
+      echo "Exporting the following variables:"
+      while IFS= read -r line; do
+        read -r -A tokens <<< "$line"
+        export "${tokens[2]}"="${tokens[3]}"
+        echo -e "\t${tokens[2]}=${tokens[3]}"
+      done <<< "$environ"
+    fi
 
     # Execute commands
 
-    echo "The following commands are requested:"
-    while IFS= read -r line; do
-      cmdStripped=${line/"[CMD] "/}
-      echo -e "\t$cmdStripped"
-    done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
-
-    if read -r "confirm?Ok with you? (Y/N)[default no]: " && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]; then
+    if [[ -n $gimmeCommands ]]; then
+      echo "The following commands are requested:"
       while IFS= read -r line; do
-        cmdStripped=${line/"[CMD]"/}
-        read -r -A tokens <<< "$cmdStripped"
-        command="${tokens[1]}"
-        args="${tokens[@]:1}"
-        echo -e "$(eval "$command" "$args")"
+        cmdStripped=${line/"[CMD] "/}
+        echo -e "\t$cmdStripped"
       done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
-    else
-      echo "No injection commands executed!"
+
+      if read -r "confirm?Ok with you? (Y/N)[default no]: " && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]; then
+        while IFS= read -r line; do
+          cmdStripped=${line/"[CMD]"/}
+          read -r -A tokens <<< "$cmdStripped"
+          command="${tokens[1]}"
+          args="${tokens[@]:1}"
+          echo -e "$(eval "$command" "$args")"
+        done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
+      else
+        echo "No injection commands executed!"
+      fi
     fi
   fi
 fi
