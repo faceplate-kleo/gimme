@@ -5,6 +5,7 @@ import (
 	"github.com/faceplate-kleo/gimme-core/config"
 	"gopkg.in/yaml.v3"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 )
@@ -103,7 +104,7 @@ func ListAliases(conf *config.Config) error {
 	}
 
 	for alias, dest := range aliases {
-		fmt.Printf("%-20s\t%s\n", alias, dest)
+		fmt.Printf("%-20s\t%s\n", alias, path.Dir(dest))
 	}
 	return nil
 }

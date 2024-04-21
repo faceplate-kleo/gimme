@@ -22,16 +22,11 @@ type Config struct {
 }
 
 func LoadRootConfig(dryrun, manifest bool) (Config, error) {
-	configPath := path.Join(os.Getenv("HOME"), defaultRootConfig)
-	override, set := os.LookupEnv("GIMME_CONFIG_PATH")
-	if set {
-		configPath = override
-	}
-
 	base := Config{
 		Dryrun:   dryrun,
 		Manifest: manifest,
 	}
+	configPath := base.GetConfigFilePath()
 	data, err := os.ReadFile(configPath)
 	if err != nil {
 		return base, fmt.Errorf("failed to read config file: %s", err)
@@ -54,17 +49,22 @@ func (c *Config) DetermineHome() string {
 }
 
 func (c *Config) GetConfigFilePath() string {
-	return path.Join(c.DetermineHome(), ".gimme", "config.yaml")
+	override, set := os.LookupEnv("GIMME_ROOT_PATH")
+	if set {
+		return override
+	}
+	return path.Join(os.Getenv("HOME"), ".gimme", "config.yaml")
 }
 
 func (c *Config) GetAliasFilePath() string {
-	return path.Join(c.DetermineHome(), ".gimme", "aliases.yaml")
+	return path.Join(os.Getenv("HOME"), ".gimme", "aliases.yaml")
 }
 
 func (c *Config) EnsureSetup() error {
 	home := os.Getenv("HOME")
-	if len(c.HomeOverride) > 0 {
-		home = c.HomeOverride
+	override, set := os.LookupEnv("GIMME_ROOT_PATH")
+	if set {
+		home = override
 	}
 	gimmeConfDir := path.Join(home, ".gimme")
 	err := os.Mkdir(gimmeConfDir, 0775)

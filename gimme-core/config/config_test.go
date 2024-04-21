@@ -25,7 +25,7 @@ func TestProcess(t *testing.T) {
 
 func TestLoadConfig(t *testing.T) {
 	fmt.Println(os.Getenv("PWD"))
-	err := os.Setenv("GIMME_CONFIG_PATH", "../test/.gimme/test-config.yaml")
+	err := os.Setenv("GIMME_ROOT_PATH", "../test/.gimme/test-config.yaml")
 	assert.Nil(t, err)
 	conf, err := LoadRootConfig(false, false)
 	assert.Nil(t, err)
