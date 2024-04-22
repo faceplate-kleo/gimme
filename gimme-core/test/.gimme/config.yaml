@@ -1,0 +1,3 @@
+---
+homeOverride: "../test"
+kubeconfigEdit: true
