@@ -40,6 +40,15 @@ func LoadRootConfig(dryrun, manifest bool) (Config, error) {
 	return base, err
 }
 
+func GetConfigDirectory() string {
+	home := os.Getenv("HOME")
+	override, set := os.LookupEnv("GIMME_ROOT_PATH")
+	if set {
+		home = override
+	}
+	return path.Join(home, ".gimme")
+}
+
 func (c *Config) DetermineHome() string {
 	home := os.Getenv("HOME")
 	if c.HomeOverride != "" {
@@ -49,15 +58,11 @@ func (c *Config) DetermineHome() string {
 }
 
 func (c *Config) GetConfigFilePath() string {
-	override, set := os.LookupEnv("GIMME_ROOT_PATH")
-	if set {
-		return override
-	}
-	return path.Join(os.Getenv("HOME"), ".gimme", "config.yaml")
+	return path.Join(GetConfigDirectory(), "config.yaml")
 }
 
 func (c *Config) GetAliasFilePath() string {
-	return path.Join(os.Getenv("HOME"), ".gimme", "aliases.yaml")
+	return path.Join(GetConfigDirectory(), "aliases.yaml")
 }
 
 func (c *Config) EnsureSetup() error {

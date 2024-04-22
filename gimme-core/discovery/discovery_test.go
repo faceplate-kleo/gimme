@@ -13,7 +13,7 @@ func TestWalk(t *testing.T) {
 }
 
 func TestSyncAliases(t *testing.T) {
-	err := os.Setenv("GIMME_CONFIG_PATH", "../test/.gimme/test-config.yaml")
+	err := os.Setenv("GIMME_ROOT_PATH", "../test")
 	assert.Nil(t, err, "error from os.Setenv: %s", err)
 
 	conf, err := config.LoadRootConfig(false, false)
