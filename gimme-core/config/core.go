@@ -17,6 +17,7 @@ const (
 type Config struct {
 	Dryrun         bool   `yaml:",omitempty"`
 	Manifest       bool   `yaml:",omitempty"`
+	AutoTrust      bool   `yaml:"autoTrust"`
 	HomeOverride   string `yaml:"homeOverride"`
 	KubeconfigEdit bool   `yaml:"kubeconfigEdit"`
 }

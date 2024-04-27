@@ -33,6 +33,9 @@ func (s *SpecV1) Process() error {
 }
 
 func (s *SpecV1) executeInit() error {
+	if s.Conf.AutoTrust && s.Conf.Manifest {
+		fmt.Println("[AUTOTRUST]")
+	}
 	for _, initLine := range s.Gimme.Init {
 		if s.Conf.Manifest {
 			fmt.Printf("[CMD] %s\n", initLine)
