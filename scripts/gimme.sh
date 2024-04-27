@@ -11,6 +11,8 @@ else
     IFS=' ' read -r -a warp <<< "$(echo "$gimmeRaw" | grep "\[WARP\]")"
     environ="$(echo "$gimmeRaw" | grep "\[ENV\]")"
     gimmeCommands="$(echo "$gimmeRaw" | grep "\[CMD\]")"
+    echo "$gimmeRaw" | grep -q "\[AUTOTRUST\]"
+    autoTrust=$?
 
     warpDest="${warp[1]}"
     cd "$warpDest" || return
@@ -35,7 +37,7 @@ else
         echo -e "\t$cmdStripped"
       done <<< "$(echo "$gimmeCommands" | grep "\[CMD\]")"
 
-      if read -r -p "Ok with you? (Y/N): " confirm && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]; then
+      if [[ $autoTrust == "0" ]] || ( read -r -p "Ok with you? (Y/N): " confirm && [[ $confirm == [yY] ]] || [[ $confirm == [yY][eE][sS] ]]); then
         while IFS= read -r line; do
           cmdStripped=${line/"[CMD]"/}
           read -r -a tokens <<< "$cmdStripped"

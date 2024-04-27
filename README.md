@@ -77,15 +77,18 @@ gimme list
 
 ## Configuration
 
-Gimme's global configuration can be found at `$HOME/.gimme/config.yaml`. At time of writing, there is only one configuration option that matters: `homeOverride`
+Gimme's global configuration can be found at `$HOME/.gimme/config.yaml`. At time of writing, there are only two configuration options that matter: `homeOverride` and `autoTrust`
 
 An example config.yaml:
 ```yaml
 ---
 homeOverride: /path/to/another/home
+autoTrust: false
 ```
 
 `homeOverride` changes the behavior of gimme's filesystem walk to start at the specified directory, rather than $HOME. 
-This can be useful if you have a very cluttered home directory, or if you simply want to limit gimme's scope of vision. 
+This can be useful if you have a very cluttered home directory, or if you simply want to limit gimme's scope of vision.
 
 An absolute path is required here.
+
+`autoTrust` skips the user input step when running commands specified in `.gimme.yaml`, thus *automatically trusting* all gimme files on the system. Use this option with caution.
