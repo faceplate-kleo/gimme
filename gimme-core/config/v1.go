@@ -10,13 +10,25 @@ import (
 type SpecV1 struct {
 	Conf         *Config      `yaml:",omitempty"`
 	GimmeVersion string       `yaml:"gimmeVersion"`
-	Gimme        gimmeBlockV1 `yaml:"gimme"`
+	Gimme        GimmeBlockV1 `yaml:"gimme"`
 }
 
-type gimmeBlockV1 struct {
+type GimmeBlockV1 struct {
 	Alias string            `yaml:"alias"`
 	Init  []string          `yaml:"init"`
 	Env   map[string]string `yaml:"env"`
+}
+
+func NewSpecV1(alias string, conf *Config) SpecV1 {
+	return SpecV1{
+		Conf:         conf,
+		GimmeVersion: "v1",
+		Gimme: GimmeBlockV1{
+			Alias: alias,
+			Init:  []string{},
+			Env:   map[string]string{},
+		},
+	}
 }
 
 func (s *SpecV1) Process() error {

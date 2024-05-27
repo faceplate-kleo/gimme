@@ -49,6 +49,20 @@ func PopulateAliases(paths []string) (map[string]string, error) {
 	return aliases, nil
 }
 
+func WriteAliasFile(conf *config.Config, aliases map[string]string) error {
+	yamlData, err := yaml.Marshal(aliases)
+	if err != nil {
+		return fmt.Errorf("failed to marshal alias yaml: %s", err)
+	}
+
+	err = os.WriteFile(conf.GetAliasFilePath(), yamlData, 0664)
+	if err != nil {
+		return fmt.Errorf("failed to write alias yaml: %s", err)
+	}
+
+	return nil
+}
+
 func SyncAliasFile(conf *config.Config) error {
 	if conf == nil {
 		return fmt.Errorf("failed to sync alias file: config reference is nil")
@@ -64,17 +78,24 @@ func SyncAliasFile(conf *config.Config) error {
 		return fmt.Errorf("failed to populate aliases: %s", err)
 	}
 
-	yamlData, err := yaml.Marshal(aliases)
-	if err != nil {
-		return fmt.Errorf("failed to marshal alias yaml: %s", err)
+	return WriteAliasFile(conf, aliases)
+}
+
+func AppendToAliasFile(conf *config.Config, toAppend map[string]string) error {
+	if conf == nil {
+		return fmt.Errorf("failed to append to alias file: config reference is nil")
 	}
 
-	err = os.WriteFile(conf.GetAliasFilePath(), yamlData, 0664)
+	aliases, err := ReadAliasFile(conf)
 	if err != nil {
-		return fmt.Errorf("failed to write alias yaml: %s", err)
+		return fmt.Errorf("failed to read alias file: %s", err)
 	}
 
-	return nil
+	for k, v := range toAppend {
+		aliases[k] = v
+	}
+
+	return WriteAliasFile(conf, aliases)
 }
 
 func ReadAliasFile(conf *config.Config) (map[string]string, error) {
@@ -107,4 +128,41 @@ func ListAliases(conf *config.Config) error {
 		fmt.Printf("%-20s\t%s\n", alias, path.Dir(dest))
 	}
 	return nil
+}
+
+func ValidateAlias(conf *config.Config, alias string) (bool, error) {
+	aliases, err := ReadAliasFile(conf)
+	if err != nil {
+		return false, fmt.Errorf("failed to list aliases: %s", err)
+	}
+
+	for _, check := range aliases {
+		if check == alias {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func PinDirectory(conf *config.Config, path, alias string) error {
+	if ok, err := ValidateAlias(conf, alias); !ok {
+		if err != nil {
+			return fmt.Errorf("failed to validate alias %q: %s", alias, err)
+		}
+		return fmt.Errorf("alias already exists: %s", alias)
+	}
+
+	blankConfig := config.NewSpecV1(alias, nil)
+
+	yamlData, err := yaml.Marshal(blankConfig)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(path, yamlData, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write gimmefilefile %s: %s", path, err)
+	}
+
+	return AppendToAliasFile(conf, map[string]string{alias: path})
 }
