@@ -24,7 +24,11 @@ else
       while IFS= read -r line; do
         read -r -A tokens <<< "$line"
         export "${tokens[2]}"="${tokens[3]}"
-        echo -e "\t${tokens[2]}=${tokens[3]}"
+        if echo "${tokens[2]}" | grep -q "TOKEN"; then
+          echo -e "\t${tokens[2]}=[REDACTED]"
+        else
+          echo -e "\t${tokens[2]}=${tokens[3]}"
+        fi
       done <<< "$environ"
     fi
 
