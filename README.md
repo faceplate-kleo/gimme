@@ -11,7 +11,7 @@ ___
 
 ## Prerequisites
 
-- Either `bash` or `zsh`. Other shells may be compatable, but they are as yet untested.
+- Either `bash` or `zsh`. Other shells may be compatible, but they are as yet untested.
 - Root access to your system
 - [Go >=v1.22.2](https://go.dev/doc/install)
 
